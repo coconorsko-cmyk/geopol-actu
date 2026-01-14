@@ -450,12 +450,43 @@
             },
         ];
 
+       // ==========================================
+        // 3. LE ROUTEUR & FONCTIONS (Barre + Bouton)
         // ==========================================
-        // MOTEUR DU SITE
-        // ==========================================
+        
         const app = document.getElementById('app');
+        const mybutton = document.getElementById("scrollTopBtn");
+        const progressBar = document.getElementById("progress-bar");
+        const progressContainer = document.getElementById("progress-container");
+
+        // --- GESTION UNIQUE DU SCROLL (Fusion des deux fonctions) ---
+        window.onscroll = function() {
+            // A. Gérer le Bouton "Haut"
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                if(mybutton) mybutton.style.display = "block";
+            } else {
+                if(mybutton) mybutton.style.display = "none";
+            }
+
+            // B. Gérer la Barre de Progression
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            if(progressBar) progressBar.style.width = scrolled + "%";
+        };
+
+        // Fonction pour remonter
+        function topFunction() {
+            document.body.scrollTop = 0; 
+            document.documentElement.scrollTop = 0; 
+        }
+
+        // --- FONCTIONS D'AFFICHAGE ---
 
         function renderHome() {
+            // Cacher la barre de progression sur l'accueil
+            if(progressContainer) progressContainer.style.display = "none";
+
             const hero = articlesDB.find(a => a.hero) || articlesDB[0];
             const others = articlesDB.filter(a => a.id !== hero.id);
 
@@ -470,7 +501,6 @@
                                 <p>Cliquez pour lire l'article complet...</p>
                             </div>
                         </a>
-
                         <div class="section-header">FIL D'ACTUALITÉ</div>
                         ${others.map(article => `
                             <a href="#article/${article.id}" class="article-card">
@@ -482,20 +512,19 @@
                             </a>
                         `).join('')}
                     </main>
-
                     <aside class="sidebar">
                         <h3>TENDANCES</h3>
-                        <a href="#article/1" class="trend-link">#1. Iran : La chute ?</a>
-                        <a href="#category/France" class="trend-link">#2. </a>
-                        <a href="#category/Société" class="trend-link">#3. </a>
+                        <a href="#article/6" class="trend-link">#1. Dossier Groenland</a>
+                        <a href="#article/5" class="trend-link">#2. Affaire RN</a>
+                        <a href="#article/1" class="trend-link">#3. Iran 2026</a>
                     </aside>
                 </div>
             `;
             app.innerHTML = html;
-            toggleProgressBar(false)
         }
 
         function renderCategory(catName) {
+            if(progressContainer) progressContainer.style.display = "none";
             const decodedCat = decodeURIComponent(catName);
             const filtered = articlesDB.filter(a => a.categorie === decodedCat);
 
@@ -511,20 +540,24 @@
                                     <h3 class="card-title">${article.titre}</h3>
                                 </div>
                             </a>
-                        `).join('') : '<p>Aucun article dans cette rubrique.</p>'}
+                        `).join('') : '<p>Aucun article.</p>'}
                     </main>
-                    <aside class="sidebar">
-                        <h3>NAVIGATION</h3>
-                        <a href="#home" class="trend-link">← Retour Accueil</a>
-                    </aside>
+                    <aside class="sidebar"><a href="#home" class="trend-link">← Retour Accueil</a></aside>
                 </div>
             `;
             app.innerHTML = html;
         }
 
         function renderArticle(id) {
+            // Afficher la barre de progression sur l'article
+            if(progressContainer) progressContainer.style.display = "block";
+            
             const article = articlesDB.find(a => a.id == id);
             if(article) {
+                // Calcul du temps de lecture
+                const wordCount = article.contenu.split(' ').length;
+                const readingTime = Math.ceil(wordCount / 200);
+
                 let html = `
                     <div style="width: 100%;">
                         <a href="#home" class="btn-back">← RETOUR ACCUEIL</a>
@@ -532,11 +565,9 @@
                             <span style="color:var(--royal-blue); font-weight:900; text-transform:uppercase;">${article.categorie}</span>
                             <h1 class="single-title">${article.titre}</h1>
                             <div class="single-meta">
-                               Publié le ${article.date} • 
-                               <span style="color:var(--royal-blue); font-weight:bold;">
-                                     ⏱️ ${Math.ceil(article.contenu.split(' ').length / 200)} min de lecture
-                                </span>
-                                </div>
+                                Publié le ${article.date} • 
+                                <span style="color:var(--royal-blue); font-weight:bold;">⏱️ ${readingTime} min de lecture</span>
+                            </div>
                             <img src="${article.image}" class="single-img" alt="cover">
                             <div class="single-text">${article.contenu}</div>
                         </article>
@@ -544,7 +575,6 @@
                 `;
                 app.innerHTML = html;
             } else { app.innerHTML = "<h2>404 - Article non trouvé</h2>"; }
-            toggleProgressBar(true)
         }
 
         function router() {
@@ -561,37 +591,7 @@
 
         window.addEventListener('hashchange', router);
         window.addEventListener('load', router);
-        // Faire bouger la barre de progression
-window.onscroll = function() {
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = (winScroll / height) * 100;
-    document.getElementById("progress-bar").style.width = scrolled + "%";
-};
-
-// Afficher la barre uniquement sur les articles
-function toggleProgressBar(isShow) {
-    document.getElementById("progress-container").style.display = isShow ? "block" : "none";
-}
-// --- GESTION DU BOUTON REMONTER ---
-    const mybutton = document.getElementById("scrollTopBtn");
-
-    // Quand on scrolle de 200px, le bouton apparaît
-    window.onscroll = function() { scrollFunction() };
-
-    function scrollFunction() {
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-            mybutton.style.display = "block";
-        } else {
-            mybutton.style.display = "none";
-        }
-    }
-
-    // Quand on clique, on remonte tout en haut
-    function topFunction() {
-        document.body.scrollTop = 0; // Pour Safari
-        document.documentElement.scrollTop = 0; // Pour Chrome, Firefox, IE
-    }
     </script>
 </body>
 </html>
+
