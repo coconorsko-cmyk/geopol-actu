@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GÉOPOL - L'Information Globale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. DESIGN SYSTEM --- */
+        :root {
+            --bg-color: #f0f2f5;
+            --white: #ffffff;
+            --royal-blue: #0040ff;
+            --ink-black: #111111;
+            --text-gray: #444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--ink-black);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding-bottom: 50px;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+
+        /* --- 2. HEADER --- */
+        header {
+            background: var(--ink-black);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 3%;
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 4px solid var(--royal-blue);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1.8rem;
+            color: white;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        
+        .nav-item {
+            color: #ccc;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+        
+        .nav-item:hover { color: white; background: var(--royal-blue); transform: skew(-10deg); }
+
+        /* --- 3. STRUCTURE GENERALE --- */
+        .container {
+            width: 96%;
+            max-width: 1800px;
+            margin: 30px auto;
+            min-height: 80vh;
+        }
+
+        /* GRID LAYOUT */
+        .home-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+        }
+
+        /* --- 4. COMPOSANTS VISUELS --- */
+        
+        .btn-back {
+            display: inline-block;
+            background: var(--ink-black);
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--royal-blue);
+        }
+
+        /* Hero Section (À la une) */
+        .hero-card {
+            background: var(--white);
+            border: 2px solid var(--ink-black);
+            display: flex;
+            margin-bottom: 40px;
+            box-shadow: 10px 10px 0 var(--royal-blue);
+            transition: 0.2s;
+            min-height: 500px;
+        }
+        .hero-card:hover { transform: translate(-2px, -2px); }
+        .hero-img { width: 60%; object-fit: cover; border-right: 2px solid var(--ink-black); }
+        .hero-content { width: 40%; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* C'EST ICI QUE JE REGLE LA TAILLE DU TITRE ORDI */
+        .hero-title { font-family: 'Russo One'; font-size: 2.5rem; margin: 15px 0; line-height: 1.1; }
+
+        /* Liste des Articles */
+        .section-header {
+            font-family: 'Russo One'; font-size: 1.8rem;
+            border-left: 10px solid var(--royal-blue); padding-left: 15px; margin-bottom: 25px;
+        }
+
+        .article-card {
+            background: var(--white);
+            border: 1px solid #ccc;
+            border-bottom: 3px solid #bbb;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: flex; gap: 25px;
+            transition: 0.2s;
+        }
+        .article-card:hover { border-color: var(--royal-blue); transform: translateX(5px); }
+        .card-thumb { width: 200px; height: 140px; object-fit: cover; background: #eee; flex-shrink: 0; }
+        .card-cat { color: var(--royal-blue); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; }
+        .card-title { font-size: 1.4rem; font-weight: 700; margin: 5px 0; }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--royal-blue);
+            color: white;
+            padding: 30px;
+            height: fit-content;
+            box-shadow: 8px 8px 0 var(--ink-black);
+        }
+        .sidebar h3 { font-family: 'Russo One'; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-bottom: 20px; }
+        .trend-link { display: block; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 500; transition:0.2s; }
+
+        /* VUE ARTICLE */
+        .single-article {
+            background: white;
+            padding: 50px;
+            border: 2px solid var(--ink-black);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 100%; width: 100%; margin: 0 auto;
+        }
+        .single-title { font-size: 3rem; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+        .single-meta { color: #666; font-style: italic; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 40px; }
+        .single-img { width: 100%; height: 500px; object-fit: cover; margin-bottom: 40px; border: 2px solid var(--ink-black); }
+        .single-text { font-size: 1.2rem; line-height: 1.8; color: #333; max-width: 100%; }
+        .single-text p { margin-bottom: 25px; }
+        .single-text blockquote {
+            border-left: 8px solid var(--royal-blue); background: #f1f5f9;
+            padding: 20px; margin: 30px 0;
+            font-style: italic; font-weight: bold; font-size: 1.2rem;
+            color: var(--ink-black);
+        }
+        .single-text h3, .single-text h2 {
+            font-family: 'Russo One', sans-serif;
+            color: var(--royal-blue); margin-top: 40px; margin-bottom: 15px;
+            border-bottom: 2px solid #eee; padding-bottom: 10px;
+        }
+        .single-text ul { margin-left: 20px; margin-bottom: 20px; }
+        .single-text li { margin-bottom: 10px; list-style-type: square; }
+
+        /* Footer */
+        footer { background: var(--ink-black); color: #777; padding: 40px; text-align: center; margin-top: 50px; border-top: 5px solid var(--royal-blue); }
+
+        /* =========================================
+           VERSION MOBILE (RESPONSIVE) - CORRIGÉE
+           ========================================= */
+        @media (max-width: 768px) {
+            
+            header { flex-direction: column; gap: 15px; padding: 15px 5px; }
+            .nav-links { width: 100%; justify-content: center; gap: 8px; }
+            .nav-item { font-size: 0.8rem; padding: 8px; background: rgba(255,255,255,0.1); }
+
+            .container { width: 100%; margin: 10px 0; padding: 0 5px; }
+            .home-grid { display: flex; flex-direction: column; gap: 20px; }
+            .sidebar { order: 2; margin-top: 10px; }
+
+            .hero-card, .article-card { flex-direction: column; min-height: auto; }
+            .hero-img { width: 100%; height: 250px; border-right: none; border-bottom: 2px solid var(--ink-black); }
+            .hero-content, .article-card { padding: 15px; }
+            .card-thumb { width: 100%; height: 200px; }
+
+            /* --- ICI LA CORRECTION DU TITRE QUI ÉTAIT TROP GROS --- */
+            .hero-title { 
+                font-size: 24px !important; /* Force la taille petite en pixels */
+                line-height: 1.3 !important;
+                margin: 10px 0 !important;
+                hyphens: none !important; /* Interdit de couper les mots */
+                word-wrap: normal !important;
+            }
+
+            .single-article { padding: 15px; border: none; box-shadow: none; }
+            .single-title { font-size: 2rem; line-height: 1.2; }
+            .single-img { height: 250px; }
+            .single-text { font-size: 1.1rem; }
+        }
+        /* Barre de progression */
+#progress-container {
+    position: fixed;
+    top: 70px; /* Juste sous le header */
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: transparent;
+    z-index: 999;
+    display: none; /* Caché par défaut, visible sur les articles */
+}
+#progress-bar {
+    height: 100%;
+    background: var(--royal-blue);
+    width: 0%;
+    transition: 0.1s;
+}
+/* --- NOUVEAU : LA LETTRINE STYLE JOURNAL --- */
+    /* La 1ère lettre du 1er paragraphe sera grosse et bleue */
+    .single-text > p:first-of-type::first-letter {
+        font-family: 'Russo One', sans-serif;
+        font-size: 3.5rem;
+        color: var(--royal-blue);
+        float: left; /* Flotte à gauche du texte */
+        margin-right: 12px;
+        line-height: 0.8;
+        margin-top: 8px;
+    }
+
+    /* --- NOUVEAU : BOUTON REMONTER (SCROLL TO TOP) --- */
+    #scrollTopBtn {
+        display: none; /* Caché par défaut */
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99;
+        font-family: 'Russo One', sans-serif;
+        border: none;
+        outline: none;
+        background-color: var(--royal-blue);
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        font-size: 1.2rem;
+        border: 2px solid var(--ink-black);
+        box-shadow: 4px 4px 0 var(--ink-black); /* Style Brutalist */
+    }
+    #scrollTopBtn:hover {
+        background-color: var(--ink-black);
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--royal-blue);
+    }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#home" class="logo">GÉOPOL.</a>
+        <nav class="nav-links">
+            <a href="#category/Monde" class="nav-item">Monde</a>
+            <a href="#category/France" class="nav-item">France</a>
+            <a href="#category/Économie" class="nav-item">Économie</a>
+            <a href="#category/Société" class="nav-item">Société</a>
+            <a href="#category/Planète" class="nav-item">Planète</a>
+        </nav>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+    </header>
+
+    <div id="app" class="container"></div>
+
+    <button onclick="topFunction()" id="scrollTopBtn" title="Remonter">↑ HAUT</button>
+    
+    <footer> 
+     <p>© 2026 GÉOPOL - Actualités en temps réel.</p>
+    </footer>
+
+    <script>
+        const articlesDB = [
+            {
+                id: 3, 
+                titre: "Dossier Spécial : L'Iran en 2026, l'année de toutes les fractures",
+                categorie: "Monde", 
+                date: "12 Janvier 2026",
+                image: "https://images.lanouvellerepublique.fr/image/upload/69626ddd10f8ee06088b457e", 
+                contenu: `
+                    <p>Si tu penses que l’actu en Iran se résume à quelques manifs, tu rates le plus gros morceau. En ce moment, le pays est en train de vivre ce que beaucoup appellent une <strong>« phase finale de désintégration »</strong>. Pour comprendre comment on en est arrivés là, faut qu'on reprenne les bases.</p>
+
+                    <h3>Le contexte historique : Pourquoi c'est le chaos ?</h3>
+                    <p>L'Iran, c'est une histoire de fierté nationale blessée et de révolutions manquées. Tout commence vraiment pour nous en 1953. C'est le <strong>« péché originel »</strong> : la CIA et les services britanniques renversent Mossadegh. Ils remettent le Shah sur le trône, et là, c’est le début de l’autoritarisme pro-occidental.</p>
+                    <p>Mais en 1979, tout explose. La Révolution islamique, c’est pas juste un changement de chef, c’est une rupture totale avec l’Occident.</p>
+
+                    <h3>Janvier 2026 : Le pays est à feu et à sang</h3>
+                    <p>On arrive à aujourd'hui, et franchement, c'est du jamais vu. Les manifs ne sont plus localisées, elles touchent maintenant <strong>« plus de 200 points de rassemblement »</strong> et se sont propagées à <strong>« 190 villes »</strong>.</p>
+
+                    <h2>1. Une répression qui fait froid dans le dos</h2>
+                    <p>Le régime a peur. Pour la première fois depuis des lustres, ils ont déployé les <strong>« troupes au sol des Gardiens de la Révolution »</strong> pour mater les foules. Le bilan humain est flou parce qu'ils ont coupé Internet.</p>
+                    
+                    <blockquote>
+                        « 2 000 manifestants auraient été tués ces dernières 48 heures »
+                    </blockquote>
+
+                    <h2>2. L'économie en mode survie</h2>
+                    <p>Pourquoi les gens sortent ? Parce qu'ils ne peuvent plus manger. L'inflation est bloquée à <strong>« 42,4 % »</strong>, le rial ne vaut plus rien.</p>
+
+                    <h3>Analyse : Une partie d'échecs mondiale</h3>
+                    <p>Si on prend du recul, l'Iran est devenu le terrain de jeu d'une nouvelle guerre froide. Le 9 janvier 2026, un nouvel <strong>« Accord nucléaire Russo-Iranien »</strong> a été signé. Poutine utilise l'Iran comme base arrière pour la Syrie et comme fournisseur de drones.</p>
+                    
+                    <h3>Conclusion : On fait quoi maintenant ?</h3>
+                    <p>Honnêtement, on est dans le "End Game". Soit le régime survit en transformant le pays en une sorte de Corée du Nord bis ultra-répressive, soit on assiste à la chute de la théocratie.</p>
+                `,
+                hero: false
+            },
+           {
+                id: 2,
+                titre: "Les enjeux du procès de Marine Le Pen",
+                categorie: "France",
+                date: "14 Janvier 2026",
+                image: "https://static.actu.fr/uploads/2024/11/marine-le-pen-proces-ineligible-1-960x640.jpeg",
+                contenu: `
+                    <p>On ne parle pas ici de simples erreurs de comptabilité, mais de ce que l'accusation a décrit comme un véritable système de prédation visant les fonds européens. C'est une affaire de fond qui touche directement la gestion interne du Rassemblement National.</p>
+
+                    <h3>La Genèse : Une lettre et 6,8 millions d'euros</h3>
+                    <p>Tout a commencé en 2014, quand Martin Schulz, à l'époque président du Parlement européen, a alerté l'organisme antifraude OLAF. Le problème ? Une vingtaine d'assistants parlementaires apparaissaient sur l'organigramme du parti en France alors qu'ils étaient payés par Strasbourg. Le préjudice estimé a explosé au fil de l'enquête, passant de quelques milliers d'euros à 6,8 millions d'euros sur la période 2004-2016.</p>
+
+                    <h3>Des contrats sous la loupe : Les cas Griset et Légier</h3>
+                    <p>Lors du premier procès en mars 2025, deux exemples ont particulièrement marqué les esprits :</p>
+                    <ul>
+                        <li><strong>Catherine Griset :</strong> Une collaboratrice très proche de Marine Le Pen qui était payée comme assistante alors qu'elle travaillait en réalité au siège du parti à Nanterre.</li>
+                        <li><strong>Thierry Légier :</strong> Le garde du corps historique de la famille Le Pen. Le tribunal correctionnel a jugé ses contrats d'assistant comme étant « purement fictifs ».</li>
+                    </ul>
+
+                    <h3>Le Verdict du 31 Mars 2025 : Une condamnation au scalpel</h3>
+                    <p>La sanction est tombée l'année dernière : Marine Le Pen a été condamnée à cinq ans de prison (dont deux ferme) et 100 000 euros d'amende.</p>
+                    
+                    <blockquote>
+                        « Pour les juges, l'argent de l'Europe a servi de "variable d'ajustement" pour combler les finances précaires du RN. »
+                    </blockquote>
+
+                    <p>Comme l'a résumé le procureur lors de ses réquisitions, on ne jugeait pas une idéologie, mais des <em>« faits de droit commun commis par des élus »</em>.</p>
+
+                    <br>
+                    <h2 style="font-family:'Russo One'; color:var(--royal-blue);">II. L'Analyse Juridique : Le « Verrou » de l'Inéligibilité Immédiate</h2>
+                    <p>C'est là que le dossier devient un véritable casse-tête politique. On se demande souvent pourquoi Marine Le Pen est déjà écartée des scrutins alors que l'appel est toujours en cours. Tout repose sur une mécanique juridique très précise.</p>
+
+                    <h3>Le mécanisme de l'Article 131-26-2 du Code Pénal</h3>
+                    <p>C'est un héritage de la loi Sapin II de 2017 sur la transparence. Cet article impose une peine d'inéligibilité pour les élus coupables de détournement de fonds. La grande différence ici, c'est l'exécution provisoire : le tribunal a décidé de rendre l'interdiction de se présenter « immédiate », sans attendre la fin de tous les recours, à cause de la gravité des faits et du besoin de probité.</p>
+
+                    <h3>L'échec des recours constitutionnels (2025)</h3>
+                    <p>Marine Le Pen a tenté de faire sauter ce verrou juridique durant toute l'année 2025 :</p>
+                    <ul>
+                        <li><strong>Le Conseil d'État (15 octobre 2025) :</strong> Il a confirmé sa radiation des listes électorales, expliquant que l'exécution provisoire s'imposait à l'administration.</li>
+                        <li><strong>Le Conseil Constitutionnel (28 mars 2025) :</strong> Les Sages ont validé la loi, affirmant qu'elle ne cassait pas la présomption d'innocence mais servait à protéger l'intégrité du suffrage.</li>
+                    </ul>
+
+                    <h3>Le débat de fond : Juges contre Souveraineté ?</h3>
+                    <p>On assiste à un choc de principes. D'un côté, la défense parle d'une « mort politique » décidée par des juges au lieu des électeurs. De l'autre, le droit rappelle que l'inéligibilité est une sanction pénale normale.</p>
+                    
+                    <blockquote>
+                        « Mathieu Laine l'avait bien résumé en disant que "la loi ne peut pas s'arrêter là où commence l'ambition électorale", précisant que même une candidate à 42% n'est pas au-dessus du code pénal. »
+                    </blockquote>
+
+                    <br>
+                    <h2 style="font-family:'Russo One'; color:var(--royal-blue);">III. Conséquences Politiques : Entre « Trumpisation » et Succession Forcée</h2>
+                    <p>L'inéligibilité immédiate de Marine Le Pen ne se limite pas à un simple blocage administratif. On voit bien qu'elle agit comme un véritable catalyseur qui est en train de modifier l'ADN même du Rassemblement National, tout en bousculant les équilibres pour la présidentielle de 2027.</p>
+
+                    <h3>Le virage vers le « Trumpisme » à la française</h3>
+                    <p>Le verdict du 31 mars 2025 a provoqué un vrai basculement dans la doctrine du parti. Alors que le RN jouait la carte de la « dédiabolisation », il assume désormais une posture beaucoup plus frontale envers les institutions.</p>
+                    <p><strong>La stratégie de la victimisation :</strong> En parlant de « coup d'État judiciaire », le parti essaie de mobiliser les électeurs les plus critiques du système. Comme l'explique le politologue <em>Olivier Rouquan</em>, ce verdict pousse le RN vers une structure plus radicale, qui rappelle clairement le modèle de Donald Trump.</p>
+                    <p><strong>Le risque électoral :</strong> C'est un pari risqué. Cette radicalisation pourrait faire peur aux classes moyennes et supérieures. <em>Luc Rouban</em>, chercheur au CERSA, souligne d'ailleurs que si le RN s'enfonce dans l'instabilité, ces électeurs pourraient se tourner vers des candidats jugés plus « sérieux », comme Bruno Retailleau.</p>
+
+                    <h3>Le sacre par défaut de Jordan Bardella</h3>
+                    <p>L'absence forcée de la cheffe historique accélère une transition qui, normalement, aurait dû prendre beaucoup plus de temps.</p>
+                    <p><strong>Une succession qui s'impose :</strong> Même si Marine Le Pen reste la candidate naturelle dans l'esprit du parti, tout le monde commence à se préparer à son absence. Elle a d'ailleurs elle-même admis publiquement que Jordan Bardella pourrait <em>« gagner à sa place »</em>.</p>
+                    <p><strong>Ce que disent les chiffres :</strong> Les sondages de fin 2025 montrent un vrai basculement interne : 60% des sympathisants préfèrent désormais Bardella. Il arrive même en tête de l'adhésion nationale avec 37%, dépassant pour la première fois Edouard Philippe.</p>
+                    <p><strong>En route pour 2027 :</strong> Sur les premières projections, Jordan Bardella caracole en tête avec environ 30% des intentions de vote au premier tour.</p>
+
+                    <br>
+                    <h2 style="font-family:'Russo One'; color:var(--royal-blue);">IV. Réactions : Une République Fracturée et des Menaces d'Ingérence</h2>
+                    <p>Le verdict a provoqué un choc qui a rapidement dépassé les frontières françaises, mettant sous pression l'indépendance de notre système judiciaire.</p>
+
+                    <h3>La riposte sur le terrain législatif et populaire</h3>
+                    <p>Dès l'annonce de la condamnation en 2025, le RN a lancé une contre-offensive de communication massive.</p>
+                    <ul>
+                        <li><strong>Mobilisation :</strong> Entre pétitions de soutien et appels au rassemblement sur les réseaux sociaux, le parti a tout fait pour occuper l'espace médiatique.</li>
+                        <li><strong>L'initiative d'Éric Ciotti :</strong> En juin 2025, Éric Ciotti a déposé une proposition de loi pour supprimer l'exécution provisoire des peines d'inéligibilité, dénonçant une <em>« peine de mort politique »</em>. Mais sans majorité au Parlement, cette tentative reste très incertaine.</li>
+                    </ul>
+
+                    <h3>La réponse ferme de l'exécutif</h3>
+                    <p>Face à la violence des critiques du camp Le Pen, Emmanuel Macron est intervenu pour rappeler un principe de base : la justice est indépendante. Le gouvernement maintient que l'agenda politique ne peut pas servir de bouclier judiciaire et que tout justiciable possède un droit de recours, mais dans le respect des règles.</p>
+
+                    <h3>L'ombre de Donald Trump et les tensions internationales</h3>
+                    <p>C'est sans doute l'aspect le plus surprenant de ce début d'année 2026 : l'affaire est devenue un sujet diplomatique.</p>
+                    <ul>
+                        <li><strong>Menaces de sanctions :</strong> Une enquête du <em>Der Spiegel</em> révèle que l'administration Trump aurait envisagé des sanctions contre les juges français responsables de la condamnation. Trump a même fait un parallèle entre ses propres procès et ceux de Marine Le Pen.</li>
+                        <li><strong>Inquiétude des institutions :</strong> Le sénateur <em>Olivier Cadic</em> s'est alarmé de cette menace d'ingérence étrangère dans notre souveraineté.</li>
+                        <li><strong>Prudence officielle :</strong> Pour l'instant, la porte-parole <em>Maud Bregeon</em> et le procureur général <em>Rémy Heitz</em> tempèrent en expliquant que ces risques ne sont pas « avérés » et reposent sur des propos rapportés sans preuves concrètes pour le moment.</li>
+                    </ul>
+
+                    <p>Le procès en appel (du 13 janvier au 12 février 2026) est vraiment la dernière carte de Marine Le Pen. Si la cour d'appel confirme la décision cet été, le RN devra apprendre à exister sans sa figure historique pour l'échéance de 2027.</p>
+                `,
+                hero: false
+            },
+            {
+                id: 1,
+                titre: "Le Groenland, plaque tournante de la géopolitique mondiale",
+                categorie: "Monde",
+                date: "14 Janvier 2026",
+                image: "https://images.7sur7.be/OGYxY2I1ZDcyYTdhOTE1YzkyNDUvZGlvLzI1MjI0NjIyMC9maWxsLzEyMDAvNjMw/donald-trump-nen-demord-pas-il-veut-faire-du-groenland-un-territoire-americain-mais-les-ressources-de-lile-restent-inexploitees-pour-une-bonne-raison",
+                contenu: `
+                    <p>L’onde de choc qui a ébranlé les fondations du droit international ce 3 janvier 2026, lorsque les forces américaines ont lancé l’opération <strong>« Absolute Resolve »</strong> pour capturer Nicolás Maduro au cœur de sa forteresse de Caracas, ne constitue que le premier acte d’une recomposition brutale de l’hégémonie mondiale voulue par Donald Trump, car cette exfiltration spectaculaire vers les États-Unis sous prétexte de narcoterrorisme a créé ce que les observateurs nomment déjà une <em>« jurisprudence du coup de force »</em>. Ce précédent vénézuélien, où le contrôle des plus grandes réserves pétrolières mondiales a été placé sous la tutelle de Washington en moins de cinq heures, sert désormais de sombre prologue à l’ambition arctique de la Maison-Blanche, laquelle lorgne avec une insistance renouvelée sur le Groenland, territoire autonome sous souveraineté danoise qui représente aujourd'hui le nouveau verrou de la sécurité nationale américaine face aux menaces russes et chinoises.</p>
+
+                    <p>Le président américain n’a d’ailleurs pas tardé à lier ces deux dossiers, affirmant avec la verve immobilière qui le caractérise qu’il ne s’agit plus de simples arrangements de location mais d’une acquisition pure et simple du titre de propriété de l’île, martelant que :</p>
+
+                    <blockquote>
+                        « Si nous ne le faisons pas, la Russie ou la Chine le feront »
+                    </blockquote>
+
+                    <p>Une déclaration qui a plongé Copenhague dans une sidération mêlée d'une colère froide. Cette convoitise n'est pas une simple lubie mais une priorité stratégique absolue puisque le Groenland recèle dans ses entrailles <strong>23 des 34 minéraux considérés comme des « matières premières critiques »</strong> par la Commission européenne, notamment des terres rares indispensables à la transition énergétique et à l'armement de haute technologie, des ressources qui attisent les appétits alors que la fonte des glaces rend leur exploitation de plus en plus accessible.</p>
+
+                    <p>La Première ministre danoise, <strong>Mette Frederiksen</strong>, a immédiatement réagi en qualifiant cette prétention d'<em>« absurde »</em> et en exhortant les États-Unis à cesser leurs menaces contre un allié historique, soulignant que le Groenland appartient aux Groenlandais et n'est absolument pas à vendre, une position soutenue par 85 % de la population locale qui craint de voir son identité Inuit sacrifiée sur l'autel de la géopolitique américaine. Pourtant, l'administration Trump ne semble pas vouloir en rester là, évoquant déjà une <strong>« manière forte »</strong> si les négociations diplomatiques n'aboutissaient pas, ce qui laisse planer l'ombre d'une option militaire similaire à celle déployée au Venezuela, une perspective qui signifierait, selon Copenhague, la fin de l'Alliance atlantique telle que nous la connaissons.</p>
+
+                    <p>L'enjeu pour l'Europe est existentiel car le Groenland n'est pas seulement un réservoir de minerais mais aussi un hub stratégique crucial pour la surveillance des sous-marins russes et des missiles balistiques intercontinentaux transitant par la route la plus courte au-dessus de l'Arctique, une zone où la Russie renforce massivement sa présence militaire. En perdant le contrôle de ce territoire, l'Union européenne perdrait sa principale porte d'entrée vers les nouvelles routes maritimes du Nord-Est et du Nord-Ouest, lesquelles promettent de réduire drastiquement le temps de transport entre l'Europe et l'Asie au détriment des routes traditionnelles, plaçant ainsi Washington en position de maître des horloges du commerce mondial.</p>
+
+                    <p>Les analystes comme Guntram Wolff soulignent que celui qui contrôle le Groenland influence désormais un domaine clé de la souveraineté technologique, et si l'Europe ne parvient pas à proposer une alternative crédible de développement économique à l'île, laquelle reste lourdement dépendante des subventions danoises et européennes pour assurer le bien-être de sa population, elle pourrait voir ce territoire basculer irrémédiablement dans l'orbite américaine, soit par un accord financier estimé à <strong>4 000 milliards de dollars</strong>, soit par un coup de force qui ferait suite à celui de Caracas. La tension est telle que des cartes circulant dans l'entourage de la Maison-Blanche montrent déjà l'île aux couleurs du drapeau américain avec la mention <strong>« SOON »</strong>, une provocation qui rappelle que pour Donald Trump, la géographie n'est qu'un grand Monopoly où le droit des peuples s'efface devant le titre de propriété et la loi du plus fort.</p>
+
+                    <p>Dans ce contexte de <em>« piraterie du 21e siècle »</em>, l'Europe se trouve à la croisée des chemins, sommée de cesser de parler pour passer à l'action afin de protéger l'intégrité de son flanc Nord, car la chute de Maduro a prouvé que les menaces de Trump ne sont plus de simples tweets mais des ordres d'opération exécutés avec une rapidité déconcertante, laissant peu de place à la diplomatie traditionnelle face à un président qui considère que l'Arctique est une nouvelle frontière américaine qu'il compte bien conquérir avant la fin de son mandat. La survie du Groenland au sein de l'espace européen dépendra donc de la capacité de l'UE et de l'OTAN à imposer le respect du droit international, une notion qui semble bien fragile alors que les bases américaines de Thulé se préparent déjà à une expansion massive pour transformer l'île en une forteresse imprenable au cœur de l'océan Arctique.</p>
+
+                    <p>Cette dérive vers une hégémonie décomplexée, amorcée par la chute brutale du régime de Caracas et l'incarcération de Nicolás Maduro dans une prison de haute sécurité de Floride sous l'égide de l'opération <strong>« Absolute Resolve »</strong>, a ouvert une boîte de Pandore diplomatique où la force prime désormais sur le droit, car l'administration Trump, galvanisée par ce succès éclair qui lui a assuré le contrôle des plus vastes réserves de brut au monde, tourne maintenant son regard prédateur vers les étendues glacées du Groenland, considérant ce territoire non plus comme une nation autonome liée au Danemark mais comme un actif immobilier stratégique dont le prix de quatre mille milliards de dollars n'est qu'une mise de départ pour évincer définitivement les intérêts russes et chinois de l'Arctique ; cette ambition démesurée s'appuie sur une réalité géologique implacable puisque l'île recèle vingt-trois des trente-quatre minéraux jugés critiques par la Commission européenne, faisant du Groenland le futur épicentre de la souveraineté technologique mondiale, un trésor de terres rares que Washington refuse de laisser à la portée de Bruxelles, d'autant plus que la fonte accélérée de l'inlandsis facilite désormais l'accès à des gisements de néodyme et de praséodyme indispensables à la fabrication des aimants permanents pour les turbines éoliennes et les moteurs de véhicules électriques ; alors que Copenhague s'époumone à dénoncer ce qu'elle appelle une <em>« absurdité »</em> géopolitique, la Première ministre Mette Frederiksen se retrouve isolée face à un président américain qui ne s'embarrasse plus des usages diplomatiques et qui a déjà fait circuler des cartes où la bannière étoilée flotte sur les côtes de Nuuk, une provocation qui n'est que le prélude à une pression financière et militaire insoutenable, alors que 85 % de la population locale exprime son angoisse de voir sa culture inuit et son autonomie balayées par les besoins sécuritaires d'une superpuissance en pleine expansion.</p>
+
+                    <p>L'aspect militaire de cette velléité d'acquisition dépasse la simple protection des ressources pour s'ancrer dans une logique de forteresse globale, car le contrôle des bases de <strong>Pituffik</strong>, autrefois connues sous le nom de Thulé, permet aux États-Unis de verrouiller l'accès aux nouvelles routes maritimes du Nord-Est et du Nord-Ouest qui promettent de révolutionner le commerce mondial en réduisant les trajets entre Londres et Tokyo de près de 40 %, une aubaine économique que Trump entend bien monopoliser pour imposer ses propres taxes de passage, tout en renforçant ses capacités de détection contre les missiles balistiques intercontinentaux russes qui transitent par la route polaire ; cette stratégie de <em>« piraterie du 21e siècle »</em>, comme l'appellent certains diplomates européens sous couvert d'anonymat, met l'Union européenne face à une crise existentielle sans précédent, car si elle perd le Groenland, elle perd non seulement son accès privilégié à l'Arctique mais aussi sa capacité à peser dans les instances de régulation de cette région du globe qui devient le nouveau champ de bataille de la guerre froide 2.0 ; de plus, l'analyste Guntram Wolff prévient que l'Europe manque de moyens financiers pour rivaliser avec l'offre américaine, car les subventions danoises actuelles paraissent dérisoires face aux promesses d'investissement massif de la Maison-Blanche, une situation qui pourrait pousser certains leaders politiques groenlandais à céder à la tentation d'une indépendance financée par Washington, ce qui ne serait en réalité qu'un transfert de souveraineté vers un empire qui a prouvé avec le Venezuela qu'il ne reculerait devant rien pour sécuriser ses intérêts vitaux.</p>
+
+                    <p>La menace d'une intervention directe n'est plus à exclure, car les discours de Donald Trump mêlent désormais avec une régularité inquiétante la <em>« réussite »</em> de l'exfiltration de Maduro à la nécessité de <em>« sécuriser »</em> le Groenland avant que la marine chinoise n'y installe des infrastructures portuaires sous couvert d'expéditions scientifiques, une rhétorique de la <strong>« manière forte »</strong> qui laisse entendre qu'un blocus naval ou une reconnaissance unilatérale de l'indépendance de l'île par les États-Unis pourrait être décrétée d'ici la fin de l'année 2026 si le Danemark continue de s'opposer à la vente ; cette perspective terrifiante pour l'intégrité de l'espace européen est d'autant plus crédible que le sénateur Olivier Cadic a récemment alerté sur la vulnérabilité des institutions internationales face à cette nouvelle forme de diplomatie transactionnelle où le titre de propriété prévaut sur le droit des peuples à disposer d'eux-mêmes, transformant chaque parcelle stratégique du globe en une case sur un plateau de Monopoly géopolitique où les États-Unis détiennent désormais toutes les cartes maîtresses grâce à leur puissance de feu et leur contrôle quasi-total des flux financiers mondiaux ; au final, la survie du Groenland dans l'orbite européenne ne tient plus qu'à un fil diplomatique extrêmement ténu, car entre la soif de minerais critiques et le besoin impérieux de dominer militairement l'Arctique, l'administration Trump semble avoir déjà pris sa décision, laissant l'Europe dans l'attente d'un prochain coup d'éclat qui pourrait bien redessiner les frontières du monde sans que personne ne soit en mesure de s'y opposer durablement.</p>
+
+                    <p>Face à cette offensive diplomatique et territoriale d’une agressivité inouïe, la Commission européenne a déclenché en urgence son <strong>« Plan de Résilience Arctique 2026 »</strong> afin de sanctuariser les gisements de métaux critiques de Kvanefjeld et de Tanbreez, car l’Europe a pleinement conscience que l’annexion du Groenland par Washington ne serait pas qu'une simple transaction immobilière mais le coup de grâce porté à l'autonomie stratégique du Vieux Continent, une crainte exacerbée par la chute de Nicolás Maduro dont l'exfiltration brutale vers une prison de Floride a démontré que l'administration Trump ne reconnaît plus aucune frontière souveraine lorsqu'il s'agit de sécuriser des ressources énergétiques ou minières indispensables à sa suprématie ; cette volonté de fer s’exprime désormais par un chantage financier colossal, le Trésor américain ayant discrètement proposé de racheter la dette souveraine du Groenland tout en promettant un investissement de huit cents milliards de dollars dans les infrastructures de transport et d'énergie, une offre que le gouvernement de Múte B. Egede à Nuuk peine à rejeter catégoriquement tant la pression économique est forte, alors que le Danemark, par la voix de sa Première ministre Mette Frederiksen, rappelle inlassablement que :</p>
+
+                    <blockquote>
+                        « Le Groenland n'est pas une marchandise et que la souveraineté ne s'achète pas »
+                    </blockquote>
+
+                    <p>Un discours qui semble bien fragile face à la politique du fait accompli pratiquée par une Maison-Blanche qui a déjà commencé à déployer des unités de génie militaire supplémentaires sur la base de Pituffik pour transformer l'île en un centre de commandement global pour la surveillance de l'Atlantique Nord.</p>
+
+                    <p>Le président Trump, lors d'un discours enflammé à Mar-a-Lago, a d'ailleurs qualifié l'Arctique de <strong>« nouvelle frontière de la liberté américaine »</strong>, affirmant avec cynisme que les Européens sont <em>« trop faibles pour protéger leurs propres intérêts »</em> et qu'il est du devoir des États-Unis de prendre les commandes avant que la Chine, via sa « route de la soie polaire », ne transforme Nuuk en une colonie de Pékin, une rhétorique qui occulte le fait que Washington vise avant tout le monopole des terres rares pour paralyser l'industrie de pointe européenne et imposer ses propres standards technologiques dans la course aux armements spatiaux et cybernétiques ; de leur côté, les analystes du Conseil européen pour les relations internationales (ECFR) s'alarment de la possible création d'un blocus naval américain sous prétexte de <em>« protection environnementale »</em>, une manœuvre qui viserait à empêcher les navires de forage européens d'accéder aux eaux territoriales groenlandaises, reproduisant ainsi à l'échelle arctique les méthodes de pression exercées récemment dans le golfe du Venezuela pour étouffer toute velléité de résistance nationale ; cette situation pousse les institutions de Bruxelles à envisager une plainte devant la Cour internationale de Justice, même si beaucoup craignent que cette démarche ne soit qu'un geste symbolique face à un président qui a déjà prouvé qu'il préférait la loi de la force à celle des traités, laissant le Groenland dans une position de vulnérabilité absolue où son destin semble se jouer davantage dans les bureaux feutrés de Washington que dans les assemblées démocratiques de Copenhague ou de Strasbourg.</p>
+
+                    <p>L'enjeu est d'autant plus vital que l'Union européenne a investi des dizaines de milliards d'euros dans des projets de recherche et de développement liés à la transition verte qui dépendent quasi exclusivement des ressources minières de l'île, et si ce verrou saute, l'Europe se retrouvera à la merci d'un protectorat américain capable de couper l'approvisionnement au moindre désaccord diplomatique, ce qui reviendrait à une <strong>vassalisation technologique totale</strong> que la présidente de la Commission européenne tente d'éviter en multipliant les accords bilatéraux secrets avec les leaders inuits, lesquels réclament désormais un siège de plein droit à l'ONU pour se protéger de l'appétit des superpuissances ; parallèlement, la Russie observe cette tension avec une satisfaction mal dissimulée, renforçant sa flotte de brise-glaces nucléaires le long de la route maritime du Nord pour offrir une alternative logistique à l'Europe, un jeu dangereux où chaque acteur tente de tirer profit de la rupture entre les alliés transatlantiques provoquée par l'impulsivité de Trump ; ainsi, l'année 2026 s'annonce comme celle de toutes les fractures, car entre la capture de Maduro et la menace d'annexion du Groenland, le monde assiste à la naissance d'un nouvel ordre mondial où le territoire est redevenu une monnaie d'échange et où la survie des nations dépend désormais de leur capacité à résister à une diplomatie de la prédation qui ne dit pas son nom.</p>
+                `,
+                hero: true
+            },
+        ];
+
+        // ==========================================
+        // MOTEUR DU SITE
+        // ==========================================
+        const app = document.getElementById('app');
+
+        function renderHome() {
+            const hero = articlesDB.find(a => a.hero) || articlesDB[0];
+            const others = articlesDB.filter(a => a.id !== hero.id);
+
+            let html = `
+                <div class="home-grid">
+                    <main>
+                        <a href="#article/${hero.id}" class="hero-card">
+                            <img src="${hero.image}" class="hero-img" alt="Une">
+                            <div class="hero-content">
+                                <span style="background:var(--royal-blue); color:white; padding:5px 10px; font-weight:bold; width:fit-content; margin-bottom:10px;">${hero.categorie}</span>
+                                <h2 class="hero-title">${hero.titre}</h2>
+                                <p>Cliquez pour lire l'article complet...</p>
+                            </div>
+                        </a>
+
+                        <div class="section-header">FIL D'ACTUALITÉ</div>
+                        ${others.map(article => `
+                            <a href="#article/${article.id}" class="article-card">
+                                <img src="${article.image}" class="card-thumb" alt="img">
+                                <div>
+                                    <div class="card-cat">${article.categorie} • ${article.date}</div>
+                                    <h3 class="card-title">${article.titre}</h3>
+                                </div>
+                            </a>
+                        `).join('')}
+                    </main>
+
+                    <aside class="sidebar">
+                        <h3>TENDANCES</h3>
+                        <a href="#article/1" class="trend-link">#1. Iran : La chute ?</a>
+                        <a href="#category/France" class="trend-link">#2. </a>
+                        <a href="#category/Société" class="trend-link">#3. </a>
+                    </aside>
+                </div>
+            `;
+            app.innerHTML = html;
+            toggleProgressBar(false)
+        }
+
+        function renderCategory(catName) {
+            const decodedCat = decodeURIComponent(catName);
+            const filtered = articlesDB.filter(a => a.categorie === decodedCat);
+
+            let html = `
+                <div class="section-header" style="font-size:2rem; margin-bottom:30px;">RUBRIQUE : ${decodedCat.toUpperCase()}</div>
+                <div class="home-grid">
+                    <main>
+                        ${filtered.length > 0 ? filtered.map(article => `
+                            <a href="#article/${article.id}" class="article-card">
+                                <img src="${article.image}" class="card-thumb" alt="img">
+                                <div>
+                                    <div class="card-cat">${article.categorie} • ${article.date}</div>
+                                    <h3 class="card-title">${article.titre}</h3>
+                                </div>
+                            </a>
+                        `).join('') : '<p>Aucun article dans cette rubrique.</p>'}
+                    </main>
+                    <aside class="sidebar">
+                        <h3>NAVIGATION</h3>
+                        <a href="#home" class="trend-link">← Retour Accueil</a>
+                    </aside>
+                </div>
+            `;
+            app.innerHTML = html;
+        }
+
+        function renderArticle(id) {
+            const article = articlesDB.find(a => a.id == id);
+            if(article) {
+                let html = `
+                    <div style="width: 100%;">
+                        <a href="#home" class="btn-back">← RETOUR ACCUEIL</a>
+                        <article class="single-article">
+                            <span style="color:var(--royal-blue); font-weight:900; text-transform:uppercase;">${article.categorie}</span>
+                            <h1 class="single-title">${article.titre}</h1>
+                            <div class="single-meta">
+                               Publié le ${article.date} • 
+                               <span style="color:var(--royal-blue); font-weight:bold;">
+                                     ⏱️ ${Math.ceil(article.contenu.split(' ').length / 200)} min de lecture
+                                </span>
+                                </div>
+                            <img src="${article.image}" class="single-img" alt="cover">
+                            <div class="single-text">${article.contenu}</div>
+                        </article>
+                    </div>
+                `;
+                app.innerHTML = html;
+            } else { app.innerHTML = "<h2>404 - Article non trouvé</h2>"; }
+            toggleProgressBar(true)
+        }
+
+        function router() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#article/')) {
+                renderArticle(hash.split('/')[1]);
+            } else if (hash.startsWith('#category/')) {
+                renderCategory(hash.split('/')[1]);
+            } else {
+                renderHome();
+            }
+            window.scrollTo(0,0);
+        }
+
+        window.addEventListener('hashchange', router);
+        window.addEventListener('load', router);
+        // Faire bouger la barre de progression
+window.onscroll = function() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("progress-bar").style.width = scrolled + "%";
+};
+
+// Afficher la barre uniquement sur les articles
+function toggleProgressBar(isShow) {
+    document.getElementById("progress-container").style.display = isShow ? "block" : "none";
+}
+// --- GESTION DU BOUTON REMONTER ---
+    const mybutton = document.getElementById("scrollTopBtn");
+
+    // Quand on scrolle de 200px, le bouton apparaît
+    window.onscroll = function() { scrollFunction() };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // Quand on clique, on remonte tout en haut
+    function topFunction() {
+        document.body.scrollTop = 0; // Pour Safari
+        document.documentElement.scrollTop = 0; // Pour Chrome, Firefox, IE
+    }
+    </script>
+</body>
+</html>
