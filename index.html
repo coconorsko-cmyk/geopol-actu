@@ -253,6 +253,118 @@
         transform: translate(-2px, -2px);
         box-shadow: 6px 6px 0 var(--royal-blue);
     }
+        /* --- TIMELINE VERTICALE --- */
+.timeline {
+    border-left: 4px solid var(--royal-blue);
+    margin: 40px 0 40px 10px;
+    padding-left: 20px;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+}
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -29px; /* Ajustement pour être sur la ligne */
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border: 4px solid var(--ink-black);
+    border-radius: 50%;
+}
+.timeline-date {
+    font-family: 'Russo One', sans-serif;
+    color: var(--royal-blue);
+    font-size: 1.1rem;
+}
+.timeline-content {
+    font-size: 1rem;
+    color: #444;
+}
+        /* --- FICHE DATA GÉOPOL --- */
+.geo-data-card {
+    background: #f1f5f9;
+    border: 2px solid var(--ink-black);
+    padding: 20px;
+    margin: 30px 0;
+    width: 100%;
+    max-width: 400px; /* Pas trop large */
+    float: right; /* Se met à droite du texte (sur ordi) */
+    margin-left: 20px;
+}
+.geo-data-title {
+    background: var(--royal-blue);
+    color: white;
+    font-family: 'Russo One', sans-serif;
+    padding: 5px 10px;
+    display: inline-block;
+    margin-bottom: 15px;
+    transform: rotate(-2deg); /* Petit effet stylé */
+}
+.geo-data-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 8px 0;
+    font-size: 0.9rem;
+}
+.geo-data-label { font-weight: bold; color: var(--text-gray); }
+.geo-data-value { font-weight: bold; color: var(--ink-black); }
+
+/* Sur mobile, on enlève le flottement à droite */
+@media (max-width: 768px) {
+    .geo-data-card { float: none; margin: 20px 0; max-width: 100%; }
+}
+        /* --- GLOSSAIRE INTERACTIF --- */
+.mot-cle {
+    border-bottom: 2px dotted var(--royal-blue); /* Souligné en pointillé */
+    cursor: help;
+    position: relative;
+    font-weight: bold;
+}
+
+/* La bulle de définition (cachée par défaut) */
+.mot-cle::after {
+    content: attr(data-def); /* Prend le texte de l'attribut data-def */
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink-black);
+    color: white;
+    padding: 10px;
+    width: 200px;
+    font-size: 0.8rem;
+    font-weight: normal;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s;
+    box-shadow: 4px 4px 0 var(--royal-blue);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Flèche de la bulle */
+.mot-cle::before {
+    content: "";
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    border: 6px solid transparent;
+    border-top-color: var(--ink-black);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+/* Apparition au survol */
+.mot-cle:hover::after, .mot-cle:hover::before {
+    visibility: visible;
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -430,7 +542,7 @@
 
                     <p>Cette dérive vers une hégémonie décomplexée, amorcée par la chute brutale du régime de Caracas et l'incarcération de Nicolás Maduro dans une prison de haute sécurité de Floride sous l'égide de l'opération <strong>« Absolute Resolve »</strong>, a ouvert une boîte de Pandore diplomatique où la force prime désormais sur le droit, car l'administration Trump, galvanisée par ce succès éclair qui lui a assuré le contrôle des plus vastes réserves de brut au monde, tourne maintenant son regard prédateur vers les étendues glacées du Groenland, considérant ce territoire non plus comme une nation autonome liée au Danemark mais comme un actif immobilier stratégique dont le prix de quatre mille milliards de dollars n'est qu'une mise de départ pour évincer définitivement les intérêts russes et chinois de l'Arctique ; cette ambition démesurée s'appuie sur une réalité géologique implacable puisque l'île recèle vingt-trois des trente-quatre minéraux jugés critiques par la Commission européenne, faisant du Groenland le futur épicentre de la souveraineté technologique mondiale, un trésor de terres rares que Washington refuse de laisser à la portée de Bruxelles, d'autant plus que la fonte accélérée de l'inlandsis facilite désormais l'accès à des gisements de néodyme et de praséodyme indispensables à la fabrication des aimants permanents pour les turbines éoliennes et les moteurs de véhicules électriques ; alors que Copenhague s'époumone à dénoncer ce qu'elle appelle une <em>« absurdité »</em> géopolitique, la Première ministre Mette Frederiksen se retrouve isolée face à un président américain qui ne s'embarrasse plus des usages diplomatiques et qui a déjà fait circuler des cartes où la bannière étoilée flotte sur les côtes de Nuuk, une provocation qui n'est que le prélude à une pression financière et militaire insoutenable, alors que 85 % de la population locale exprime son angoisse de voir sa culture inuit et son autonomie balayées par les besoins sécuritaires d'une superpuissance en pleine expansion.</p>
 
-                    <p>L'aspect militaire de cette velléité d'acquisition dépasse la simple protection des ressources pour s'ancrer dans une logique de forteresse globale, car le contrôle des bases de <strong>Pituffik</strong>, autrefois connues sous le nom de Thulé, permet aux États-Unis de verrouiller l'accès aux nouvelles routes maritimes du Nord-Est et du Nord-Ouest qui promettent de révolutionner le commerce mondial en réduisant les trajets entre Londres et Tokyo de près de 40 %, une aubaine économique que Trump entend bien monopoliser pour imposer ses propres taxes de passage, tout en renforçant ses capacités de détection contre les missiles balistiques intercontinentaux russes qui transitent par la route polaire ; cette stratégie de <em>« piraterie du 21e siècle »</em>, comme l'appellent certains diplomates européens sous couvert d'anonymat, met l'Union européenne face à une crise existentielle sans précédent, car si elle perd le Groenland, elle perd non seulement son accès privilégié à l'Arctique mais aussi sa capacité à peser dans les instances de régulation de cette région du globe qui devient le nouveau champ de bataille de la guerre froide 2.0 ; de plus, l'analyste Guntram Wolff prévient que l'Europe manque de moyens financiers pour rivaliser avec l'offre américaine, car les subventions danoises actuelles paraissent dérisoires face aux promesses d'investissement massif de la Maison-Blanche, une situation qui pourrait pousser certains leaders politiques groenlandais à céder à la tentation d'une indépendance financée par Washington, ce qui ne serait en réalité qu'un transfert de souveraineté vers un empire qui a prouvé avec le Venezuela qu'il ne reculerait devant rien pour sécuriser ses intérêts vitaux.</p>
+                    <p>L'aspect militaire de cette velléité d'acquisition dépasse la simple protection des ressources pour s'ancrer dans une logique de forteresse globale, car le contrôle des bases de <strong>Pituffik</strong>, autrefois connues sous le nom de Thulé, permet aux États-Unis de verrouiller l'accès aux nouvelles routes maritimes du Nord-Est et du Nord-Ouest qui promettent de révolutionner le commerce mondial en réduisant les trajets entre Londres et Tokyo de près de 40 %, une aubaine économique que Trump entend bien monopoliser pour imposer ses propres taxes de passage, tout en renforçant ses capacités de détection contre les missiles balistiques intercontinentaux russes qui transitent par la route polaire ; cette stratégie de <em>« piraterie du 21e siècle »</em>, comme l'appellent certains diplomates européens sous couvert d'anonymat, met l'<span class="mot-cle" data-def="L'Union européenne (UE) est l'association volontaire d'États européens, dans les domaines économique et politique, afin d'assurer le maintien de la paix en Europe et de favoriser le progrès économique et social.">Union européenne</span> face à une crise existentielle sans précédent, car si elle perd le Groenland, elle perd non seulement son accès privilégié à l'Arctique mais aussi sa capacité à peser dans les instances de régulation de cette région du globe qui devient le nouveau champ de bataille de la guerre froide 2.0 ; de plus, l'analyste Guntram Wolff prévient que l'Europe manque de moyens financiers pour rivaliser avec l'offre américaine, car les subventions danoises actuelles paraissent dérisoires face aux promesses d'investissement massif de la Maison-Blanche, une situation qui pourrait pousser certains leaders politiques groenlandais à céder à la tentation d'une indépendance financée par Washington, ce qui ne serait en réalité qu'un transfert de souveraineté vers un empire qui a prouvé avec le Venezuela qu'il ne reculerait devant rien pour sécuriser ses intérêts vitaux.</p>
 
                     <p>La menace d'une intervention directe n'est plus à exclure, car les discours de Donald Trump mêlent désormais avec une régularité inquiétante la <em>« réussite »</em> de l'exfiltration de Maduro à la nécessité de <em>« sécuriser »</em> le Groenland avant que la marine chinoise n'y installe des infrastructures portuaires sous couvert d'expéditions scientifiques, une rhétorique de la <strong>« manière forte »</strong> qui laisse entendre qu'un blocus naval ou une reconnaissance unilatérale de l'indépendance de l'île par les États-Unis pourrait être décrétée d'ici la fin de l'année 2026 si le Danemark continue de s'opposer à la vente ; cette perspective terrifiante pour l'intégrité de l'espace européen est d'autant plus crédible que le sénateur Olivier Cadic a récemment alerté sur la vulnérabilité des institutions internationales face à cette nouvelle forme de diplomatie transactionnelle où le titre de propriété prévaut sur le droit des peuples à disposer d'eux-mêmes, transformant chaque parcelle stratégique du globe en une case sur un plateau de Monopoly géopolitique où les États-Unis détiennent désormais toutes les cartes maîtresses grâce à leur puissance de feu et leur contrôle quasi-total des flux financiers mondiaux ; au final, la survie du Groenland dans l'orbite européenne ne tient plus qu'à un fil diplomatique extrêmement ténu, car entre la soif de minerais critiques et le besoin impérieux de dominer militairement l'Arctique, l'administration Trump semble avoir déjà pris sa décision, laissant l'Europe dans l'attente d'un prochain coup d'éclat qui pourrait bien redessiner les frontières du monde sans que personne ne soit en mesure de s'y opposer durablement.</p>
 
@@ -445,6 +557,27 @@
                     <p>Le président Trump, lors d'un discours enflammé à Mar-a-Lago, a d'ailleurs qualifié l'Arctique de <strong>« nouvelle frontière de la liberté américaine »</strong>, affirmant avec cynisme que les Européens sont <em>« trop faibles pour protéger leurs propres intérêts »</em> et qu'il est du devoir des États-Unis de prendre les commandes avant que la Chine, via sa « route de la soie polaire », ne transforme Nuuk en une colonie de Pékin, une rhétorique qui occulte le fait que Washington vise avant tout le monopole des terres rares pour paralyser l'industrie de pointe européenne et imposer ses propres standards technologiques dans la course aux armements spatiaux et cybernétiques ; de leur côté, les analystes du Conseil européen pour les relations internationales (ECFR) s'alarment de la possible création d'un blocus naval américain sous prétexte de <em>« protection environnementale »</em>, une manœuvre qui viserait à empêcher les navires de forage européens d'accéder aux eaux territoriales groenlandaises, reproduisant ainsi à l'échelle arctique les méthodes de pression exercées récemment dans le golfe du Venezuela pour étouffer toute velléité de résistance nationale ; cette situation pousse les institutions de Bruxelles à envisager une plainte devant la Cour internationale de Justice, même si beaucoup craignent que cette démarche ne soit qu'un geste symbolique face à un président qui a déjà prouvé qu'il préférait la loi de la force à celle des traités, laissant le Groenland dans une position de vulnérabilité absolue où son destin semble se jouer davantage dans les bureaux feutrés de Washington que dans les assemblées démocratiques de Copenhague ou de Strasbourg.</p>
 
                     <p>L'enjeu est d'autant plus vital que l'Union européenne a investi des dizaines de milliards d'euros dans des projets de recherche et de développement liés à la transition verte qui dépendent quasi exclusivement des ressources minières de l'île, et si ce verrou saute, l'Europe se retrouvera à la merci d'un protectorat américain capable de couper l'approvisionnement au moindre désaccord diplomatique, ce qui reviendrait à une <strong>vassalisation technologique totale</strong> que la présidente de la Commission européenne tente d'éviter en multipliant les accords bilatéraux secrets avec les leaders inuits, lesquels réclament désormais un siège de plein droit à l'ONU pour se protéger de l'appétit des superpuissances ; parallèlement, la Russie observe cette tension avec une satisfaction mal dissimulée, renforçant sa flotte de brise-glaces nucléaires le long de la route maritime du Nord pour offrir une alternative logistique à l'Europe, un jeu dangereux où chaque acteur tente de tirer profit de la rupture entre les alliés transatlantiques provoquée par l'impulsivité de Trump ; ainsi, l'année 2026 s'annonce comme celle de toutes les fractures, car entre la capture de Maduro et la menace d'annexion du Groenland, le monde assiste à la naissance d'un nouvel ordre mondial où le territoire est redevenu une monnaie d'échange et où la survie des nations dépend désormais de leur capacité à résister à une diplomatie de la prédation qui ne dit pas son nom.</p>
+                    <div class="timeline">
+    <div class="timeline-item">
+        <div class="timeline-date">2014</div>
+        <div class="timeline-content">Martin Schulz alerte l'OLAF sur les assistants.</div>
+    </div>
+    <div class="timeline-item">
+        <div class="timeline-date">31 Mars 2025</div>
+        <div class="timeline-content">Condamnation en première instance (5 ans de prison).</div>
+    </div>
+    <div class="timeline-item">
+        <div class="timeline-date">Janvier 2026</div>
+        <div class="timeline-content">Début du procès en appel décisif.</div>
+    </div>
+</div>
+<div class="geo-data-card">
+    <div class="geo-data-title">FICHE : GROENLAND</div>
+    <div class="geo-data-row"><span class="geo-data-label">Statut</span><span class="geo-data-value">Territoire autonome (Danemark)</span></div>
+    <div class="geo-data-row"><span class="geo-data-label">Population</span><span class="geo-data-value">56 000 hab.</span></div>
+    <div class="geo-data-row"><span class="geo-data-label">Ressources</span><span class="geo-data-value">Terres rares, Uranium</span></div>
+    <div class="geo-data-row"><span class="geo-data-label">Base clé</span><span class="geo-data-value">Thulé (USA)</span></div>
+</div>
                 `,
                 hero: true
             },
@@ -594,4 +727,5 @@
     </script>
 </body>
 </html>
+
 
